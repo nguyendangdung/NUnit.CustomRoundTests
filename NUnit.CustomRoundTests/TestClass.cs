@@ -43,6 +43,22 @@ namespace NUnit.CustomRoundTests
 
             return value;
         }
+        double Round(double value, int digits)
+        {
+            if (value > 0)
+            {
+                return Math.Round(value, digits, MidpointRounding.AwayFromZero);
+            }
+            if (value < 0)
+            {
+                var numberOfDecimalDigits = NumberOfDecimalDigits(value);
+                double delta = GetDelta(numberOfDecimalDigits);
+                return Math.Round(value + delta, digits, MidpointRounding.AwayFromZero);
+            }
+
+            return value;
+        }
+
         [Test]
         public void TestMethod()
         {
@@ -66,6 +82,10 @@ namespace NUnit.CustomRoundTests
             Assert.AreEqual(Round(-1.6666), -2);
             Assert.AreEqual(Round(-0.9999999), -1);
             Assert.AreEqual(Round(-0.001), 0);
+
+            Assert.AreEqual(Round(2.35, 1), 2.4);
+
+            Assert.AreEqual(Round(-2.35, 1), -2.3);
 
         }
     }
